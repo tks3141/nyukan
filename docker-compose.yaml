@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  db:
+    build: ./db/
+    # image: postgres
+    restart: always
+    ports:
+      - 3150:5432
+    environment:
+        POSTGRES_DB: test
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes: 
+  db_data :
