@@ -21,13 +21,13 @@ log_path = '/var/log/nfc.log'
 
 def render_big_msg(msg):
     f = Figlet(font="big")
-    msg = f.renderText("hello world")
+    msg = f.renderText(msg)
     print(msg)
     # return msg
 
 def post_nfc(url,idm,send_msg):
     assert type(idm) == str
-    assert type(ent_time) == str
+    assert type(send_msg) == str
     
     print('post:',idm,send_msg)
     # print(idm,ent_time,file=open(log_path, 'a+'))
@@ -35,7 +35,7 @@ def post_nfc(url,idm,send_msg):
     #     f.write('\nnfc:'+idm+ent_time)
 
     response = requests.post(
-        API_URL,
+        url,
         json.dumps({'nfc':idm,'msg':send_msg}),
         headers={'Content-Type': 'application/json'})
     pprint.pprint(response)
@@ -44,7 +44,8 @@ def post_nfc(url,idm,send_msg):
 
 def main():
     clf = nfc.ContactlessFrontend('usb')
-    print('nfc_reader init finish , NFC waiting...')
+    print('nfc_reader init finish')
+    render_big_msg('NFC waiting...')
     # USBに接続されたNFCリーダに接続してインスタンス化
     while True:
         target = clf.sense(nfc.clf.RemoteTarget('212F'))
@@ -56,11 +57,11 @@ def main():
                 idm = tag.identifier.hex()
 
                 time_now = datetime.datetime.now()
-                send_msg = time_now.strftime('%m月%d日 %H:%M'))+'に'
+                send_msg = time_now.strftime('%m月%d日 %H:%M')+'に'
 
                 print('idm',idm,time_now,file=open(log_path, 'a+'))
                 post_nfc(SLACK_API_URL,idm,send_msg)
-                post_nfc(FLASK_API_URL,idm,'')
+                # post_nfc(FLASK_API_URL,idm,'')
                 
                 time.sleep(TIME_WAIT)
                 render_big_msg("READY FOR READING NFC ... ")
@@ -69,10 +70,6 @@ def main():
                 print(tag+'\n read but Only Type3Tag is supported now.')
 
     clf.close()
-
-
-print('aaa')
-
 
 if __name__ == "__main__":
     sys.stdout = open('/dev/console', 'w')
