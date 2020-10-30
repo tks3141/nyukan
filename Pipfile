@@ -11,6 +11,7 @@ psycopg2-binary = "*"
 flask = "*"
 fastapi = "*"
 uvicorn = "*"
+pyfiglet = "*"
 
 [requires]
 python_version = "3.8"
