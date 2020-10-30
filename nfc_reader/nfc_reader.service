@@ -1,0 +1,13 @@
+[Unit]
+Description = 入館記録ボット
+After=local-fs.target
+ConditionPathExists=/opt/nfc_reader/bin
+
+[Service]
+ExecStart=/opt/nfc_reader/bin/autoexec.sh
+Restart=no
+Type=simple
+StandardOutput=syslog+console
+
+[Install]
+WantedBy=multi-user.target
