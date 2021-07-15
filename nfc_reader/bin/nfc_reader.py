@@ -60,6 +60,7 @@ def main():
                 send_msg = time_now.strftime('%m月%d日 %H:%M')+'に'
 
                 print('idm',idm,time_now,file=open(log_path, 'a+'))
+                render_big_msg("OK !!")
                 post_nfc(SLACK_API_URL,idm,send_msg)
                 # post_nfc(FLASK_API_URL,idm,'')
                 
